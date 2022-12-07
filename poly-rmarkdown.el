@@ -10,7 +10,7 @@
 
 ;; hostmode
 (define-hostmode poly-rmarkdown-hostmode
-  :mode 'markdown-mode)
+  :mode 'gfm-mode)
 
 ;; minor mode
 (define-innermode poly-rmarkdown-innermode
