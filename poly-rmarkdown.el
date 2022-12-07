@@ -65,7 +65,7 @@
     (command "rmarkdown::render('%I', output_format = NULL, knit_root_dir=getwd())")
     (output-file #'pm--rmarkdown-output-file-from-.Last.value)))
 
-(defcustom poly-rmarkdown-exporter
+(defcustom poly-rmarkdown-Exporter
   (pm-shell-exporter :name "Rmarkdown"
                      :from
                      '(("Rmarkdown"  "\\.[rR]?md\\|rapport\\'" "R Markdown"
@@ -88,7 +88,7 @@
   :group 'polymode-export
   :type 'object)
 
-(defcustom poly-rmarkdown-ess_exporter
+(defcustom poly-rmarkdown-ESS_Exporter
   (pm-callback-exporter :name "Rmarkdown-ESS"
                         :from
                         '(("Rmarkdown" "\\.[rR]?md\\|rapport\\'" "R Markdown"
@@ -113,9 +113,9 @@
   :group 'polymode-export
   :type 'object)
 
-(polymode-register-exporter poly-rmarkdown-exporter nil
+(polymode-register-exporter poly-rmarkdown-Exporter nil
                             poly-rmarkdown-polymode)
-(polymode-register-exporter poly-rmarkdown-ess_exporter nil
+(polymode-register-exporter poly-rmarkdown-ESS_Exporter nil
                             poly-rmarkdown-polymode)
 
 ;; ESS command
