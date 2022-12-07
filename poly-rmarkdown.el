@@ -17,11 +17,11 @@
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(```{?[rR].*\n\\)" 1)
   :tail-matcher (cons "^[ \t]*\\(```\\)[ \t]*$" 1)
-  :adjust-face 'markdown-code-face
   :head-mode 'gfm-mode
   :tail-mode 'gfm-mode
-  :head-adjust-face nil
-  :tail-adjust-face nil)
+  :adjust-face 'markdown-code-face
+  :head-adjust-face 'markdown-code-face
+  :tail-adjust-face 'markdown-code-face)
 
 ;; polymode
 (define-polymode poly-rmarkdown-mode
