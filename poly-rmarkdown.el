@@ -88,7 +88,7 @@
   :group 'polymode-export
   :type 'object)
 
-(defcustom poly-rmarkdown-ess-exporter
+(defcustom poly-rmarkdown-ess_exporter
   (pm-callback-exporter :name "Rmarkdown-ESS"
                         :from
                         '(("Rmarkdown" "\\.[rR]?md\\|rapport\\'" "R Markdown"
@@ -113,9 +113,9 @@
   :group 'polymode-export
   :type 'object)
 
-(polymode-register-exporter poly-rmarkdown-ess-exporter nil
-                            poly-rmarkdown-polymode)
 (polymode-register-exporter poly-rmarkdown-exporter nil
+                            poly-rmarkdown-polymode)
+(polymode-register-exporter poly-rmarkdown-ess_exporter nil
                             poly-rmarkdown-polymode)
 
 ;; ESS command
