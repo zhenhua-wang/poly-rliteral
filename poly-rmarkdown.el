@@ -13,10 +13,17 @@
   :mode 'gfm-mode)
 
 ;; minor mode
+(defun pm--rmarkdown-tail-matcher (ahead)
+  (when (< ahead 0)
+    (error "Backwards tail match not implemented"))
+  ;; (beg, end + nextline)
+  (when (re-search-forward "^[ \t]*\\(```\\)[ \t]*$")
+    (cons (match-beginning 0) (+ 1 (match-end 0)))))
+
 (define-innermode poly-rmarkdown-innermode
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(```{?[rR].*\n\\)" 1)
-  :tail-matcher (cons "^[ \t]*\\(```\\)[ \t]*$" 1)
+  :tail-matcher 'pm--rmarkdown-tail-matcher
   :head-mode 'gfm-mode
   :tail-mode 'gfm-mode
   :adjust-face 'markdown-code-face
