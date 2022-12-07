@@ -23,7 +23,7 @@
 ;; polymode
 (define-polymode poly-rmarkdown-mode
   :hostmode 'poly-rmarkdown-hostmode
-  :innermodes '(poly-rmarkdown-innermode)
+  :innermodes '(poly-rmarkdown-innermode))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.[rR]md\\'" . poly-rmarkdown-mode))
