@@ -118,6 +118,17 @@
 (polymode-register-exporter poly-rmarkdwon-exporter nil
                             poly-rmarkdown-polymode)
 
+;; Setup
+(defun poly-r-eval-region (beg end msg)
+  (let ((ess-inject-source t))
+    (ess-eval-region beg end nil msg)))
+
+(defun poly-r-mode-setup ()
+  (when (equal ess-dialect "R")
+    (setq-local polymode-eval-region-function #'poly-r-eval-region)))
+
+(add-hook 'ess-mode-hook #'poly-r-mode-setup)
+
 ;; ESS command
 (declare-function ess-async-command "ess-inf.el")
 (declare-function ess-force-buffer-current "ess-inf.el")
