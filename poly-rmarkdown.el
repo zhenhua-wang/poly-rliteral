@@ -119,6 +119,55 @@
 (polymode-register-exporter poly-rmarkdwon-exporter nil
                             poly-rmarkdown-polymode)
 
+;; ESS command
+(declare-function ess-async-command "ess-inf.el")
+(declare-function ess-force-buffer-current "ess-inf.el")
+(declare-function ess-process-get "ess-inf.el")
+(declare-function ess-process-put "ess-inf.el")
+(declare-function comint-previous-prompt "comint.el")
+
+(defun pm--ess-callback (proc string)
+  (let ((ofile (process-get proc :output-file)))
+    ;; This is getting silly. Ess splits output for optimization reasons. So we
+    ;; are collecting output from 3 places:
+    ;;   - most recent STRING
+    ;;   - string in accumulation buffer
+    ;;   - string already in output buffer
+    (with-current-buffer (if (fboundp 'ess--accumulation-buffer)
+                             (ess--accumulation-buffer proc)
+                           (process-get proc 'accum-buffer-name))
+      (setq string (concat (buffer-string) string)))
+    (with-current-buffer (process-buffer proc)
+      (setq string (concat (buffer-substring (or ess--tb-last-input (comint-previous-prompt)) (point-max))
+                           string)))
+    (with-temp-buffer
+      (setq ess-dialect "R"
+            ess-local-process-name (process-name proc))
+      (insert string)
+      (when (string-match-p "Error\\(:\\| +in\\)" string)
+        (user-error "Errors durring ESS async command"))
+      (when (functionp ofile)
+        (setq ofile (funcall ofile))))
+    ofile))
+
+(defun pm--ess-run-command (command callback &rest _ignore)
+  (require 'ess)
+  (let ((ess-eval-visibly t)
+        (ess-dialect "R"))
+    (ess-force-buffer-current)
+    (with-current-buffer (ess-get-process-buffer)
+      (unless (and (boundp 'goto-address-mode)
+                   goto-address-mode)
+        ;; mostly for shiny apps (added in ESS 19)
+        (goto-address-mode 1)))
+    (ess-process-put :output-file pm--output-file)
+    (when callback
+      (ess-process-put 'callbacks (list callback))
+      (ess-process-put 'interruptable? t)
+      (ess-process-put 'running-async? t))
+    (ess-eval-linewise command)
+    (display-buffer (ess-get-process-buffer))))
+
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.[rR]md\\'" . poly-rmarkdown-mode))
 
