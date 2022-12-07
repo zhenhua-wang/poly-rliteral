@@ -18,7 +18,10 @@
   :head-matcher (cons "^[ \t]*\\(```{?[rR].*\n\\)" 1)
   :tail-matcher (cons "^[ \t]*\\(```\\)[ \t]*$" 1)
   :head-mode 'host
-  :tail-mode 'host)
+  :tail-mode 'host
+  :adjust-face 'markdown-code-face
+  :head-adjust-face nil
+  :tail-adjust-face nil)
 
 ;; polymode
 (define-polymode poly-rmarkdown-mode
