@@ -16,8 +16,10 @@
 (define-innermode poly-rmarkdown-innermode
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(```{?[rR].*\n\\)" 1)
-  :tail-matcher (cons "^[ \t]*\\(```\\)[\n]$" 1)
+  :tail-matcher (cons "^[ \t]*\\(```\\)[ \t]*$" 1)
   :adjust-face 'markdown-code-face
+  :head-mode 'gfm-mode
+  :tail-mode 'gfm-mode
   :head-adjust-face nil
   :tail-adjust-face nil)
 
