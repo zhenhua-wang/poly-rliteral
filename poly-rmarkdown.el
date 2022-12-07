@@ -51,6 +51,20 @@
     (command "Rscript -e \"rmarkdown::render('%i', output_format = NULL)\"")
     (output-file #'pm--rmarkdown-output-file-sniffer)))
 
+(defun pm--rmarkdown-callback-auto-selector (action &rest _ignore)
+  (cl-case action
+    (doc "AUTO DETECT")
+    ;; last file is not auto-detected unless we cat new line
+    (command "rmarkdown::render('%I', output_format = 'all', knit_root_dir=getwd())")
+    (output-file #'pm--rmarkdown-output-file-from-.Last.value)))
+
+(defun pm--rmarkdown-callback-default-selector (action &rest _ignore)
+  (cl-case action
+    (doc "DEFAULT")
+    ;; last file is not auto-detected unless we cat new line
+    (command "rmarkdown::render('%I', output_format = NULL, knit_root_dir=getwd())")
+    (output-file #'pm--rmarkdown-output-file-from-.Last.value)))
+
 (defcustom poly-rmarkdwon-exporter
   (pm-shell-exporter :name "Rmarkdown"
                      :from
@@ -73,21 +87,6 @@
   `polymode-exporter-output-file-format'."
   :group 'polymode-export
   :type 'object)
-
-(defun pm--rmarkdown-callback-auto-selector (action &rest _ignore)
-  (cl-case action
-    (doc "AUTO DETECT")
-    ;; last file is not auto-detected unless we cat new line
-    (command "rmarkdown::render('%I', output_format = 'all', knit_root_dir=getwd())")
-    (output-file #'pm--rmarkdown-output-file-from-.Last.value)))
-
-(defun pm--rmarkdown-callback-default-selector (action &rest _ignore)
-  (cl-case action
-    (doc "DEFAULT")
-    ;; last file is not auto-detected unless we cat new line
-    (command "rmarkdown::render('%I', output_format = NULL, knit_root_dir=getwd())")
-    (output-file #'pm--rmarkdown-output-file-from-.Last.value)))
-
 
 (defcustom poly-rmarkdwon-ess-exporter
   (pm-callback-exporter :name "Rmarkdown-ESS"
