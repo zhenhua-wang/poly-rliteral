@@ -118,17 +118,6 @@
 (polymode-register-exporter poly-rmarkdwon-exporter nil
                             poly-rmarkdown-polymode)
 
-;; Setup
-(defun poly-r-eval-region (beg end msg)
-  (let ((ess-inject-source t))
-    (ess-eval-region beg end nil msg)))
-
-(defun poly-r-mode-setup ()
-  (when (equal ess-dialect "R")
-    (setq-local polymode-eval-region-function #'poly-r-eval-region)))
-
-(add-hook 'ess-mode-hook #'poly-r-mode-setup)
-
 ;; ESS command
 (declare-function ess-async-command "ess-inf.el")
 (declare-function ess-force-buffer-current "ess-inf.el")
@@ -177,6 +166,26 @@
       (ess-process-put 'running-async? t))
     (ess-eval-linewise command)
     (display-buffer (ess-get-process-buffer))))
+
+;; Setup
+(defun poly-r-eval-region (beg end msg)
+  (let ((ess-inject-source t))
+    (ess-eval-region beg end nil msg)))
+
+(defun poly-r-mode-setup ()
+  (when (equal ess-dialect "R")
+    (setq-local polymode-eval-region-function #'poly-r-eval-region)))
+
+(add-hook 'ess-mode-hook #'poly-r-mode-setup)
+
+;; COMPAT
+(when (fboundp 'advice-add)
+  (advice-add 'ess-eval-paragraph :around 'pm-execute-narrowed-to-span)
+  (advice-add 'ess-eval-buffer :around 'pm-execute-narrowed-to-span)
+  (advice-add 'ess-beginning-of-function :around 'pm-execute-narrowed-to-span))
+
+(add-to-list 'polymode-move-these-vars-from-old-buffer 'ess-local-process-name)
+(add-to-list 'polymode-mode-abbrev-aliases '("ess-r" . "R"))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.[rR]md\\'" . poly-rmarkdown-mode))
