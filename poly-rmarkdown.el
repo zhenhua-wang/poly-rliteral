@@ -179,6 +179,9 @@
 (advice-add 'ess-eval-buffer :around 'pm-execute-narrowed-to-span)
 (advice-add 'ess-beginning-of-function :around 'pm-execute-narrowed-to-span)
 
+;; alias
+(add-to-list 'polymode-mode-abbrev-aliases '("ess-r" . "R"))
+
 ;; lsp content
 (defun pm--lsp-rmarkdown-text (&optional beg end)
   (save-restriction
