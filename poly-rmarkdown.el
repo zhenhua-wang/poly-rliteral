@@ -51,7 +51,7 @@
     (command "Rscript -e \"rmarkdown::render('%i', output_format = NULL)\"")
     (output-file #'pm--rmarkdown-output-file-sniffer)))
 
-(defcustom poly-r-markdown-exporter
+(defcustom poly-rmarkdwon-exporter
   (pm-shell-exporter :name "Rmarkdown"
                      :from
                      '(("Rmarkdown"  "\\.[rR]?md\\|rapport\\'" "R Markdown"
@@ -89,7 +89,7 @@
     (output-file #'pm--rmarkdown-output-file-from-.Last.value)))
 
 
-(defcustom poly-r-markdown-ess-exporter
+(defcustom poly-rmarkdwon-ess-exporter
   (pm-callback-exporter :name "Rmarkdown-ESS"
                         :from
                         '(("Rmarkdown" "\\.[rR]?md\\|rapport\\'" "R Markdown"
@@ -114,10 +114,10 @@
   :group 'polymode-export
   :type 'object)
 
-(polymode-register-exporter poly-r-markdown-ess-exporter nil
-                            poly-markdown+r-polymode)
-(polymode-register-exporter poly-r-markdown-exporter nil
-                            poly-markdown+r-polymode)
+(polymode-register-exporter poly-rmarkdwon-ess-exporter nil
+                            poly-rmarkdown-polymode)
+(polymode-register-exporter poly-rmarkdwon-exporter nil
+                            poly-rmarkdown-polymode)
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.[rR]md\\'" . poly-rmarkdown-mode))
