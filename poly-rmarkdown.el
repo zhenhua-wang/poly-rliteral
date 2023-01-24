@@ -219,6 +219,17 @@
       (apply #'concat (reverse acc)))))
 (advice-add 'pm--lsp-text :override 'pm--lsp-rmarkdown-text)
 
+;; eval region function
+(defun poly-rmarkdwon-eval-region (beg end msg)
+  (let ((ess-inject-source t))
+    (ess-eval-region beg end nil msg)))
+
+(defun poly-rmarkdwon-mode-setup ()
+  (when (equal ess-dialect "R")
+    (setq-local polymode-eval-region-function #'poly-rmarkdwon-eval-region)))
+
+(add-hook 'ess-mode-hook #'poly-rmarkdwon-mode-setup)
+
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.[rR]md\\'" . poly-rmarkdown-mode))
 
