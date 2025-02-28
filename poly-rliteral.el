@@ -124,5 +124,5 @@
 (add-to-list 'auto-mode-alist '("\\.[rR]nw\\'" . poly-rliteral-rnw-mode))
 
 
-(provide 'poly-rmarkdown)
+(provide 'poly-rliteral)
 ;;; poly-R.el ends here
