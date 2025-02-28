@@ -1,4 +1,4 @@
-;;; poly-rmarkdown.el --- A simplified verision of poly-R -*- lexical-binding: t -*-
+;;; poly-rliteral.el --- Literal programming with R -*- lexical-binding: t -*-
 ;;
 ;; Author: Zhenhua Wang
 ;;
@@ -8,46 +8,46 @@
 (require 'ess-mode)
 (require 'ess-r-mode nil t)
 
-;; poly-rmarkdown-mode
-(define-hostmode poly-rmarkdown-hostmode
+;; poly-rliteral-rmd-mode
+(define-hostmode poly-rliteral-rmd-hostmode
   :mode 'gfm-mode)
 
-(defun pm--rmarkdown-tail-matcher (ahead)
+(defun poly-rliteral-rmd--tail-matcher (ahead)
   (when (< ahead 0)
     (error "Backwards tail match not implemented"))
   ;; (beg, end + nextline)
   (when (re-search-forward "^[ \t]*\\(```\\)[ \t]*$")
     (cons (match-beginning 0) (+ 1 (match-end 0)))))
 
-(define-innermode poly-rmarkdown-innermode
+(define-innermode poly-rliteral-rmd-innermode
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(```{?[rR].*\n\\)" 1)
-  :tail-matcher 'pm--rmarkdown-tail-matcher
+  :tail-matcher 'poly-rliteral-rmd--tail-matcher
   :head-mode 'gfm-mode
   :tail-mode 'gfm-mode
   :adjust-face 'markdown-code-face
   :head-adjust-face 'markdown-code-face
   :tail-adjust-face 'markdown-code-face)
 
-(define-polymode poly-rmarkdown-mode
-  :hostmode 'poly-rmarkdown-hostmode
-  :innermodes '(poly-rmarkdown-innermode))
+(define-polymode poly-rliteral-rmd-mode
+  :hostmode 'poly-rliteral-rmd-hostmode
+  :innermodes '(poly-rliteral-rmd-innermode))
 
-;; poly-rnw-mode
-(define-hostmode poly-rnw-hostmode nil
+;; poly-rliteral-rnw-mode
+(define-hostmode poly-rliteral-rnw-hostmode nil
   :mode 'latex-mode
   :protect-font-lock t
   :protect-syntax t
   :protect-indent nil)
 
-(define-innermode poly-rnw-innermode nil
+(define-innermode poly-rliteral-rnw-innermode nil
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(<<\\(.*\\)>>=.*\n\\)" 1)
   :tail-matcher (cons "^[ \t]*\\(@.*\\)$" 1))
 
-(define-polymode poly-rnw-mode
-  :hostmode 'poly-rnw-hostmode
-  :innermodes '(poly-rnw-innermode))
+(define-polymode poly-rliteral-rnw-mode
+  :hostmode 'poly-rliteral-rnw-hostmode
+  :innermodes '(poly-rliteral-rnw-innermode))
 
 ;; export
 (defvar poly-rliteral--export-buffer "*poly-r-export*")
@@ -83,20 +83,20 @@
 (defun poly-rliteral-rmd-knit ()
   "Knit Rmarkdown file."
   (interactive)
-  (if (and (boundp poly-rmarkdown-mode) poly-rmarkdown-mode)
+  (if (and (boundp poly-rliteral-rmd-mode) poly-rliteral-rmd-mode)
       (poly-rliteral-r-export
        (format "R -e \"rmarkdown::render(\'%s\')\"" (buffer-file-name)))
     (message "Knit outside of Rmarkdown file is not supported")))
-(define-key poly-rmarkdown-mode-map (kbd "C-c C-e") #'poly-rliteral-rmd-knit)
+(define-key poly-rliteral-rmd-mode-map (kbd "C-c C-e") #'poly-rliteral-rmd-knit)
 
 (defun poly-rliteral-rnw-sweave ()
   "Sweave Rnw file."
   (interactive)
-  (if (and (boundp poly-rnw-mode) poly-rnw-mode)
+  (if (and (boundp poly-rliteral-rnw-mode) poly-rliteral-rnw-mode)
       (poly-rliteral-r-export
        (format "R CMD Sweave --pdf %s" (buffer-file-name)))
     (message "Sweave outside of Rnw file is not supported")))
-(define-key poly-rnw-mode-map (kbd "C-c C-e") #'poly-rliteral-rnw-sweave)
+(define-key poly-rliteral-rnw-mode-map (kbd "C-c C-e") #'poly-rliteral-rnw-sweave)
 
 ;; alias
 (add-to-list 'polymode-mode-abbrev-aliases '("ess-r" . "R"))
@@ -107,21 +107,21 @@
 (advice-add 'ess-beginning-of-function :around 'pm-execute-narrowed-to-span)
 
 ;; polymode eval region function
-(defun poly-rmarkdwon-eval-region (beg end msg)
+(defun poly-rliteral-rmd-eval-region (beg end msg)
   (let ((ess-inject-source t))
     (ess-eval-region beg end nil msg)))
 
-(defun poly-rmarkdwon-mode-setup ()
+(defun poly-rliteral-rmd-mode-setup ()
   (when (equal ess-dialect "R")
-    (setq-local polymode-eval-region-function #'poly-rmarkdwon-eval-region)))
+    (setq-local polymode-eval-region-function #'poly-rliteral-rmd-eval-region)))
 
-(add-hook 'ess-mode-hook #'poly-rmarkdwon-mode-setup)
-
-;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.[rR]md\\'" . poly-rmarkdown-mode))
+(add-hook 'ess-mode-hook #'poly-rliteral-rmd-mode-setup)
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.[rR]nw\\'" . poly-rnw-mode))
+(add-to-list 'auto-mode-alist '("\\.[rR]md\\'" . poly-rliteral-rmd-mode))
+
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.[rR]nw\\'" . poly-rliteral-rnw-mode))
 
 
 (provide 'poly-rmarkdown)
