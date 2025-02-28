@@ -50,49 +50,53 @@
   :innermodes '(poly-rnw-innermode))
 
 ;; export
-(defvar poly-r-export-buffer "*poly-r-export*")
+(defvar poly-rliteral--export-buffer "*poly-r-export*")
 (add-to-list 'display-buffer-alist
-             `(,poly-r-export-buffer
+             `(,poly-rliteral--export-buffer
                (display-buffer-in-side-window)
                (window-height . 0.2)
                (side . top)
                (slot . 1)))
 
-(defun poly-r-output-path ()
-  (with-current-buffer poly-r-export-buffer
+(defun poly-rliteral--output-path ()
+  (with-current-buffer poly-rliteral--export-buffer
     (goto-char (point-min))
     (when (or (re-search-forward "Output created: +\\(.*\\)" nil t)
               (re-search-forward "Output file: +\\(.*\\)" nil t))
       (expand-file-name (match-string 1)))))
 
-(defun poly-async-callback (process signal)
+(defun poly-rliteral--async-callback-find-file (path)
+  (display-buffer (find-file-noselect path)))
+
+(defun poly-rliteral--async-callback (process signal)
   (when (memq (process-status process) '(exit signal))
-    (display-buffer (find-file-noselect (poly-r-output-path)))
+    (poly-rliteral--async-callback-find-file
+     (poly-rliteral--output-path))
     (shell-command-sentinel process signal)))
 
-(defun poly-r-export (shell-command)
+(defun poly-rliteral-r-export (shell-command)
   (let ((output-buffer (get-buffer-create poly-r-export-buffer)))
     (async-shell-command shell-command output-buffer)
     (let ((proc (get-buffer-process output-buffer)))
-      (set-process-sentinel proc #'poly-async-callback))))
+      (set-process-sentinel proc #'poly-rliteral--async-callback))))
 
-(defun poly-rmd-knit ()
+(defun poly-rliteral-rmd-knit ()
   "Knit Rmarkdown file."
   (interactive)
   (if (and (boundp poly-rmarkdown-mode) poly-rmarkdown-mode)
-      (poly-r-export
+      (poly-rliteral-r-export
        (format "R -e \"rmarkdown::render(\'%s\')\"" (buffer-file-name)))
     (message "Knit outside of Rmarkdown file is not supported")))
-(define-key poly-rmarkdown-mode-map (kbd "C-c C-e") #'poly-rmd-knit)
+(define-key poly-rmarkdown-mode-map (kbd "C-c C-e") #'poly-rliteral-rmd-knit)
 
-(defun poly-rnw-sweave ()
+(defun poly-rliteral-rnw-sweave ()
   "Sweave Rnw file."
   (interactive)
   (if (and (boundp poly-rnw-mode) poly-rnw-mode)
-      (poly-r-export
+      (poly-rliteral-r-export
        (format "R CMD Sweave --pdf %s" (buffer-file-name)))
     (message "Sweave outside of Rnw file is not supported")))
-(define-key poly-rnw-mode-map (kbd "C-c C-e") #'poly-rnw-sweave)
+(define-key poly-rnw-mode-map (kbd "C-c C-e") #'poly-rliteral-rnw-sweave)
 
 ;; alias
 (add-to-list 'polymode-mode-abbrev-aliases '("ess-r" . "R"))
