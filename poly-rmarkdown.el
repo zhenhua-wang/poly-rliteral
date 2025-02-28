@@ -34,16 +34,16 @@
   :innermodes '(poly-rmarkdown-innermode))
 
 ;; poly-rnw-mode
-(define-innermode poly-rnw-innermode nil
-  :mode 'ess-r-mode
-  :head-matcher (cons "^[ \t]*\\(<<\\(.*\\)>>=.*\n\\)" 1)
-  :tail-matcher (cons "^[ \t]*\\(@.*\\)$" 1))
-
 (define-hostmode poly-rnw-hostmode nil
   :mode 'latex-mode
   :protect-font-lock t
   :protect-syntax t
   :protect-indent nil)
+
+(define-innermode poly-rnw-innermode nil
+  :mode 'ess-r-mode
+  :head-matcher (cons "^[ \t]*\\(<<\\(.*\\)>>=.*\n\\)" 1)
+  :tail-matcher (cons "^[ \t]*\\(@.*\\)$" 1))
 
 (define-polymode poly-rnw-mode
   :hostmode 'poly-rnw-hostmode
