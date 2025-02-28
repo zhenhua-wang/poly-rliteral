@@ -58,7 +58,7 @@
                (side . top)
                (slot . 1)))
 
-(defun poly-rliteral--output-path ()
+(defun poly-rliteral--export-path ()
   (with-current-buffer poly-rliteral--export-buffer
     (goto-char (point-min))
     (when (or (re-search-forward "Output created: +\\(.*\\)" nil t)
@@ -71,10 +71,10 @@
 (defun poly-rliteral--async-callback (process signal)
   (when (memq (process-status process) '(exit signal))
     (poly-rliteral--async-callback-find-file
-     (poly-rliteral--output-path))
+     (poly-rliteral--export-path))
     (shell-command-sentinel process signal)))
 
-(defun poly-rliteral-r-export (shell-command)
+(defun poly-rliteral-export (shell-command)
   (let ((output-buffer (get-buffer-create poly-rliteral--export-buffer)))
     (async-shell-command shell-command output-buffer)
     (let ((proc (get-buffer-process output-buffer)))
@@ -84,7 +84,7 @@
   "Knit Rmarkdown file."
   (interactive)
   (if (and (boundp poly-rliteral-rmd-mode) poly-rliteral-rmd-mode)
-      (poly-rliteral-r-export
+      (poly-rliteral-export
        (format "R -e \"rmarkdown::render(\'%s\')\"" (buffer-file-name)))
     (message "Knit outside of Rmarkdown file is not supported")))
 (define-key poly-rliteral-rmd-mode-map (kbd "C-c C-e") #'poly-rliteral-rmd-knit)
@@ -93,7 +93,7 @@
   "Sweave Rnw file."
   (interactive)
   (if (and (boundp poly-rliteral-rnw-mode) poly-rliteral-rnw-mode)
-      (poly-rliteral-r-export
+      (poly-rliteral-export
        (format "R CMD Sweave --pdf %s" (buffer-file-name)))
     (message "Sweave outside of Rnw file is not supported")))
 (define-key poly-rliteral-rnw-mode-map (kbd "C-c C-e") #'poly-rliteral-rnw-sweave)
