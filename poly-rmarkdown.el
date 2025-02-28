@@ -8,11 +8,10 @@
 (require 'ess-mode)
 (require 'ess-r-mode nil t)
 
-;; hostmode
+;; poly-rmarkdown-mode
 (define-hostmode poly-rmarkdown-hostmode
   :mode 'gfm-mode)
 
-;; minor mode
 (defun pm--rmarkdown-tail-matcher (ahead)
   (when (< ahead 0)
     (error "Backwards tail match not implemented"))
@@ -30,10 +29,25 @@
   :head-adjust-face 'markdown-code-face
   :tail-adjust-face 'markdown-code-face)
 
-;; polymode
 (define-polymode poly-rmarkdown-mode
   :hostmode 'poly-rmarkdown-hostmode
   :innermodes '(poly-rmarkdown-innermode))
+
+;; poly-rnw-mode
+(define-innermode poly-rnw-innermode nil
+  :mode 'ess-r-mode
+  :head-matcher (cons "^[ \t]*\\(<<\\(.*\\)>>=.*\n\\)" 1)
+  :tail-matcher (cons "^[ \t]*\\(@.*\\)$" 1))
+
+(define-hostmode poly-rnw-hostmode nil
+  :mode 'latex-mode
+  :protect-font-lock t
+  :protect-syntax t
+  :protect-indent nil)
+
+(define-polymode poly-rnw-mode
+  :hostmode 'poly-rnw-hostmode
+  :innermodes '(poly-rnw-innermode))
 
 ;; export
 (defun pm--rmarkdown-output-file-sniffer ()
@@ -232,6 +246,10 @@
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.[rR]md\\'" . poly-rmarkdown-mode))
+
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.[rR]nw\\'" . poly-rnw-mode))
+
 
 (provide 'poly-rmarkdown)
 ;;; poly-R.el ends here
