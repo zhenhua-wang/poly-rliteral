@@ -75,7 +75,7 @@
     (shell-command-sentinel process signal)))
 
 (defun poly-rliteral-r-export (shell-command)
-  (let ((output-buffer (get-buffer-create poly-r-export-buffer)))
+  (let ((output-buffer (get-buffer-create poly-rliteral--export-buffer)))
     (async-shell-command shell-command output-buffer)
     (let ((proc (get-buffer-process output-buffer)))
       (set-process-sentinel proc #'poly-rliteral--async-callback))))
