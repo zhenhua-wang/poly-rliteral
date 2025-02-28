@@ -67,14 +67,11 @@
 
 (defun poly-async-callback (process signal)
   (when (memq (process-status process) '(exit signal))
-    (with-selected-window (get-buffer-window poly-r-export-command-buffer)
-      (find-file (poly-r-output-path)))
+    (display-buffer (find-file-noselect (poly-r-output-path)))
     (shell-command-sentinel process signal)))
 
-(defvar poly-r-export-command-buffer nil)
 (defun poly-r-export (shell-command)
   (let ((output-buffer (get-buffer-create poly-r-export-buffer)))
-    (setq poly-r-export-command-buffer (current-buffer))
     (async-shell-command shell-command output-buffer)
     (let ((proc (get-buffer-process output-buffer)))
       (set-process-sentinel proc #'poly-async-callback))))
