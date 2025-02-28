@@ -107,15 +107,15 @@
 (advice-add 'ess-beginning-of-function :around 'pm-execute-narrowed-to-span)
 
 ;; polymode eval region function
-(defun poly-rliteral-rmd-eval-region (beg end msg)
+(defun poly-rliteral-eval-region (beg end msg)
   (let ((ess-inject-source t))
     (ess-eval-region beg end nil msg)))
 
-(defun poly-rliteral-rmd-mode-setup ()
+(defun poly-rliteral-setup ()
   (when (equal ess-dialect "R")
-    (setq-local polymode-eval-region-function #'poly-rliteral-rmd-eval-region)))
+    (setq-local polymode-eval-region-function #'poly-rliteral-eval-region)))
 
-(add-hook 'ess-mode-hook #'poly-rliteral-rmd-mode-setup)
+(add-hook 'ess-mode-hook #'poly-rliteral-setup)
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.[rR]md\\'" . poly-rliteral-rmd-mode))
