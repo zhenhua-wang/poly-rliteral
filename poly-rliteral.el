@@ -35,7 +35,7 @@
 
 ;; poly-rliteral-rnw-mode
 (define-hostmode poly-rliteral-rnw-hostmode nil
-  :mode 'latex-mode
+  :mode (if (fboundp 'LaTeX-mode) 'LaTeX-mode 'latex-mode)
   :protect-font-lock t
   :protect-syntax t
   :protect-indent nil)
