@@ -23,8 +23,8 @@
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(```{?[rR].*\n\\)" 1)
   :tail-matcher 'poly-rliteral-rmd--tail-matcher
-  :head-mode 'host
-  :tail-mode 'host
+  :head-mode 'gfm-mode
+  :tail-mode 'gfm-mode
   :adjust-face 'markdown-code-face
   :head-adjust-face 'markdown-code-face
   :tail-adjust-face 'markdown-code-face)
@@ -48,8 +48,8 @@
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(<<\\(.*\\)>>=.*\n\\)" 1)
   :tail-matcher 'poly-rliteral-rnw--tail-matcher
-  :head-mode 'host
-  :tail-mode 'host
+  :head-mode 'LaTeX-mode
+  :tail-mode 'LaTeX-mode
   :adjust-face 'org-block
   :head-adjust-face 'org-block
   :tail-adjust-face 'org-block)
