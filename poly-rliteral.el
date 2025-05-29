@@ -23,8 +23,8 @@
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(```{?[rR].*\n\\)" 1)
   :tail-matcher 'poly-rliteral-rmd--tail-matcher
-  :head-mode 'gfm-mode
-  :tail-mode 'gfm-mode
+  :head-mode 'host
+  :tail-mode 'host
   :adjust-face 'markdown-code-face
   :head-adjust-face 'markdown-code-face
   :tail-adjust-face 'markdown-code-face)
@@ -35,10 +35,7 @@
 
 ;; poly-rliteral-rnw-mode
 (define-hostmode poly-rliteral-rnw-hostmode nil
-  :mode 'LaTeX-mode
-  :protect-font-lock t
-  :protect-syntax t
-  :protect-indent nil)
+  :mode 'LaTeX-mode)
 
 (defun poly-rliteral-rnw--tail-matcher (ahead)
   (when (< ahead 0)
@@ -51,8 +48,8 @@
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(<<\\(.*\\)>>=.*\n\\)" 1)
   :tail-matcher 'poly-rliteral-rnw--tail-matcher
-  :head-mode 'LaTeX-mode
-  :tail-mode 'LaTeX-mode
+  :head-mode 'host
+  :tail-mode 'host
   :adjust-face 'org-block
   :head-adjust-face 'org-block
   :tail-adjust-face 'org-block)
