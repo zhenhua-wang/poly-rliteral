@@ -35,15 +35,27 @@
 
 ;; poly-rliteral-rnw-mode
 (define-hostmode poly-rliteral-rnw-hostmode nil
-  :mode (if (fboundp 'LaTeX-mode) 'LaTeX-mode 'latex-mode)
+  :mode 'LaTeX-mode
   :protect-font-lock t
   :protect-syntax t
   :protect-indent nil)
 
+(defun poly-rliteral-rnw--tail-matcher (ahead)
+  (when (< ahead 0)
+    (error "Backwards tail match not implemented"))
+  ;; (beg, end + nextline)
+  (when (re-search-forward "^[ \t]*\\(@.*\\)$")
+    (cons (match-beginning 0) (+ 1 (match-end 0)))))
+
 (define-innermode poly-rliteral-rnw-innermode nil
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(<<\\(.*\\)>>=.*\n\\)" 1)
-  :tail-matcher (cons "^[ \t]*\\(@.*\\)$" 1))
+  :tail-matcher 'poly-rliteral-rnw--tail-matcher
+  :head-mode 'LaTeX-mode
+  :tail-mode 'LaTeX-mode
+  :adjust-face 'org-block
+  :head-adjust-face 'org-block
+  :tail-adjust-face 'org-block)
 
 (define-polymode poly-rliteral-rnw-mode
   :hostmode 'poly-rliteral-rnw-hostmode
