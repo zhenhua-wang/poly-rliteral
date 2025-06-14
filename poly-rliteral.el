@@ -35,7 +35,10 @@
 
 ;; poly-rliteral-rnw-mode
 (define-hostmode poly-rliteral-rnw-hostmode nil
-  :mode 'LaTeX-mode)
+  :mode 'LaTeX-mode
+  :protect-font-lock t
+  :protect-syntax t
+  :protect-indent nil)
 
 (defun poly-rliteral-rnw--tail-matcher (ahead)
   (when (< ahead 0)
