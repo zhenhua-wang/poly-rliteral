@@ -34,7 +34,8 @@
   :innermodes '(poly-rliteral-rmd-innermode))
 
 ;; poly-rliteral-rnw-mode
-(define-hostmode poly-rliteral-rnw-hostmode poly-latex-hostmode
+(define-hostmode poly-rliteral-rnw-hostmode
+  :mode 'latex-mode
   :protect-font-lock t
   :protect-syntax t
   :protect-indent nil)
@@ -43,13 +44,13 @@
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(<<\\(.*\\)>>=.*\n\\)" 1)
   :tail-matcher (cons "^[ \t]*\\(@.*\\)$" 1)
-  :head-mode 'LaTeX-mode
-  :tail-mode 'LaTeX-mode
+  :head-mode 'latex-mode
+  :tail-mode 'latex-mode
   :adjust-face 'org-block
   :head-adjust-face 'org-block
   :tail-adjust-face 'org-block)
 
-(define-polymode poly-rliteral-rnw-mode poly-latex-root-polymode
+(define-polymode poly-rliteral-rnw-mode
   :hostmode 'poly-rliteral-rnw-hostmode
   :innermodes '(poly-rliteral-rnw-innermode))
 
