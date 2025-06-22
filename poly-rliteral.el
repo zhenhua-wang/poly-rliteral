@@ -29,13 +29,12 @@
   :head-adjust-face 'markdown-code-face
   :tail-adjust-face 'markdown-code-face)
 
-(define-polymode poly-rliteral-rmd-mode
+(define-polymode poly-rliteral-rmd-mode poly-latex-root-polymode
   :hostmode 'poly-rliteral-rmd-hostmode
   :innermodes '(poly-rliteral-rmd-innermode))
 
 ;; poly-rliteral-rnw-mode
-(define-hostmode poly-rliteral-rnw-hostmode nil
-  :mode 'LaTeX-mode
+(define-hostmode poly-rliteral-rnw-hostmode poly-latex-hostmode
   :protect-font-lock t
   :protect-syntax t
   :protect-indent nil)
