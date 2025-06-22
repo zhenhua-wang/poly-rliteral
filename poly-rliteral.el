@@ -40,17 +40,10 @@
   :protect-syntax t
   :protect-indent nil)
 
-(defun poly-rliteral-rnw--tail-matcher (ahead)
-  (when (< ahead 0)
-    (error "Backwards tail match not implemented"))
-  ;; (beg, end + nextline)
-  (when (re-search-forward "^[ \t]*\\(@.*\\)$")
-    (cons (match-beginning 0) (+ 1 (match-end 0)))))
-
 (define-innermode poly-rliteral-rnw-innermode nil
   :mode 'ess-r-mode
   :head-matcher (cons "^[ \t]*\\(<<\\(.*\\)>>=.*\n\\)" 1)
-  :tail-matcher 'poly-rliteral-rnw--tail-matcher
+  :tail-matcher (cons "^[ \t]*\\(@.*\\)$" 1)
   :head-mode 'LaTeX-mode
   :tail-mode 'LaTeX-mode
   :adjust-face 'org-block
