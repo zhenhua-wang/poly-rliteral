@@ -29,7 +29,7 @@
   :head-adjust-face 'markdown-code-face
   :tail-adjust-face 'markdown-code-face)
 
-(define-polymode poly-rliteral-rmd-mode poly-latex-root-polymode
+(define-polymode poly-rliteral-rmd-mode
   :hostmode 'poly-rliteral-rmd-hostmode
   :innermodes '(poly-rliteral-rmd-innermode))
 
@@ -49,7 +49,7 @@
   :head-adjust-face 'org-block
   :tail-adjust-face 'org-block)
 
-(define-polymode poly-rliteral-rnw-mode
+(define-polymode poly-rliteral-rnw-mode poly-latex-root-polymode
   :hostmode 'poly-rliteral-rnw-hostmode
   :innermodes '(poly-rliteral-rnw-innermode))
 
